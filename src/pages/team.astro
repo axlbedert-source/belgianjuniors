@@ -1,4 +1,5 @@
 ---
+import Icon from '../components/Icon.astro';
 import { Image } from 'astro:assets';
 import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
@@ -17,7 +18,6 @@ const firstPhoto = team[0]?.member.data.photo;
   <section class="section team">
     <div class="wrap">
       <header class="team__head" data-enter>
-        <p class="eyebrow">JWGC 2026</p>
         <h1>Our Team</h1>
       </header>
       {groups.map((group) => (
@@ -34,7 +34,7 @@ const firstPhoto = team[0]?.member.data.photo;
                   <div class="card__body">
                     <h3 class="member__name">{d.name}</h3>
                     {d.type === 'pilot' ? (
-                      <p class="member__meta"><span aria-hidden="true">✈ </span>{[d.glider, d.registration, d.compCode].filter(Boolean).join(' · ')}</p>
+                      <p class="member__meta"><Icon name="plane" size={16} />{[d.glider, d.registration, d.compCode].filter(Boolean).join(' · ')}</p>
                     ) : (
                       <p class="member__meta">{d.emoji && <span aria-hidden="true">{d.emoji} </span>}{d.role}</p>
                     )}
@@ -54,10 +54,10 @@ const firstPhoto = team[0]?.member.data.photo;
   .team__head { margin-bottom: clamp(1.5rem, 4vw, 2.5rem); }
   .team__group + .team__group { margin-top: clamp(3rem, 7vw, 5rem); }
   .team__group h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
-  .team__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: clamp(1rem, 2.5vw, 1.75rem); margin: 0; padding: 0; list-style: none; }
+  .team__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: clamp(1rem, 2.5vw, 1.75rem); margin: 0; padding: 0; list-style: none; }
   .member__photo { aspect-ratio: 4 / 5; }
   .member__photo img { object-position: 50% 30%; }
-  .member__name { margin: 0; font-family: var(--font-head); font-weight: 800; font-size: 1.45rem; }
-  .member__meta { margin: 0 0 0.5rem; font-weight: 600; color: var(--red-dark); font-size: 1rem; }
+  .member__name { margin: 0; font-family: var(--font-head); font-weight: 800; font-size: 1.35rem; }
+  .member__meta { display: flex; align-items: center; gap: 0.4rem; margin: 0 0 0.5rem; font-weight: 600; color: var(--red-dark); font-size: 1rem; }
   .member__bio :global(p) { margin: 0; color: var(--muted); font-size: 1rem; }
 </style>

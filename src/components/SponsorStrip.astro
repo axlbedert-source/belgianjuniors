@@ -12,7 +12,7 @@ const sponsors = await getSponsors();
 ---
 <section class="strip" aria-labelledby="sponsor-strip-title">
   <div class="wrap strip__head">
-    <h2 id="sponsor-strip-title" class={heading ? 'eyebrow' : 'visually-hidden'}>{t('sponsors.strip')}</h2>
+    <h2 id="sponsor-strip-title" class={heading ? 'strip__title' : 'visually-hidden'}>{t('sponsors.strip')}</h2>
     <button class="strip__toggle" type="button" aria-pressed="false" data-pause={t('sponsors.pause')} data-play={t('sponsors.play')}>
       <span class="strip__icon" aria-hidden="true"></span><span class="strip__label">{t('sponsors.pause')}</span>
     </button>
@@ -52,7 +52,7 @@ const sponsors = await getSponsors();
 <style>
   .strip { padding-block: clamp(2.5rem, 5vw, 3.5rem); border-block: 1px solid var(--line); background: var(--surface); }
   .strip__head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-  .strip__head .eyebrow { margin: 0; }
+  .strip__title { margin: 0; font-size: 1.15rem; letter-spacing: -0.01em; }
   .strip__toggle {
     display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; padding: 0 0.9rem;
     border: 1px solid var(--line); border-radius: 999px; background: var(--bg); color: var(--ink);

@@ -26,9 +26,9 @@ const events = (await getCollection('events')).sort((a, b) => a.data.date.valueO
   .schedule__item:first-child::before { left: 50%; }
   .schedule__item:last-child::before { right: 50%; }
   .schedule__dot { position: relative; width: 17px; height: 17px; border-radius: 50%; background: var(--surface); border: 4px solid var(--red); }
-  .schedule__card { width: 100%; height: 100%; padding: 0.9rem 0.75rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); text-align: center; }
+  .schedule__card { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: 0.9rem 0.75rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); text-align: center; }
   .schedule__date { margin: 0 0 0.35rem; font-size: 0.85rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-  .schedule__title { margin: 0 0 0.6rem; font-family: var(--font-sans); font-size: 1rem; font-weight: 600; letter-spacing: 0; line-height: 1.3; }
+  .schedule__title { flex: 1; margin: 0 0 0.6rem; font-family: var(--font-sans); font-size: 1rem; font-weight: 600; letter-spacing: 0; line-height: 1.3; }
   .badge--training { background: #e2f0ea; color: #17694f; }
   .badge--official { background: #e4ebf3; color: #134c85; }
   .badge--ceremony { background: #fdf1c4; color: #6b4e00; }

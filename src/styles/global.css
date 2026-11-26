@@ -81,6 +81,10 @@ a {
 }
 a:hover { color: var(--sky-dark); text-decoration-thickness: 2px; }
 
+/* Browser surfaces carry the palette too */
+::selection { background: var(--yellow); color: var(--ink); }
+html { accent-color: var(--red); caret-color: var(--red); scrollbar-color: #b9b4aa var(--bg); }
+
 :focus-visible {
   outline: 3px solid var(--sky);
   outline-offset: 3px;
@@ -99,28 +103,6 @@ a:hover { color: var(--sky-dark); text-decoration-thickness: 2px; }
 .section--night { background: var(--night); color: #f4f2ee; }
 .section--night a:not(.btn) { color: #9cc7f2; }
 .section--night .muted { color: #b9c0c8; }
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin: 0 0 1rem;
-  font-family: var(--font-head);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.eyebrow::before {
-  content: '';
-  width: 1.75rem;
-  height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--ink) 0 33%, var(--yellow) 33% 66%, var(--red) 66%);
-}
-.section--night .eyebrow { color: #b9c0c8; }
-.section--night .eyebrow::before { background: linear-gradient(90deg, #f4f2ee 0 33%, var(--yellow) 33% 66%, var(--red) 66%); }
 
 .muted { color: var(--muted); }
 .lede { font-size: clamp(1.15rem, 1.6vw, 1.3rem); color: var(--muted); max-width: 46rem; }
@@ -178,7 +160,7 @@ a:hover { color: var(--sky-dark); text-decoration-thickness: 2px; }
 }
 .section--night .btn--ghost { color: #f4f2ee; border-color: #f4f2ee; }
 .section--night .btn--ghost:hover { background: #f4f2ee; color: var(--night); }
-.btn .arrow { transition: transform 0.18s var(--ease); }
+.btn .arrow { flex: none; transition: transform 0.18s var(--ease); }
 .btn:hover .arrow { transform: translateX(3px); }
 
 .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }

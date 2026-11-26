@@ -1,4 +1,5 @@
 ---
+import Icon from '../components/Icon.astro';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Email from '../components/Email.astro';
@@ -16,7 +17,6 @@ const brochures = [
   <section class="section intro">
     <div class="wrap intro__grid">
       <div data-enter>
-        <p class="eyebrow">Sponsorship</p>
         <h1>Support the Belgian Junior Gliding Team</h1>
         <div class="prose">
           <p>The <strong>Junior World Gliding Championships (JWGC)</strong> is the ultimate stage for young aviation talent. In August 2026, the world’s best pilots under 26 will gather in <strong>Aalen, Germany</strong>, to compete in a sport that demands peak mental focus, meteorological strategy, and technical excellence.</p>
@@ -70,7 +70,7 @@ const brochures = [
         <h3>Sponsor brochure</h3>
         <ul class="actions">
           {brochures.map((b) => (
-            <li><a class="btn btn--ghost" href={b.file} hreflang={b.hreflang} download>Download brochure ({b.lang}) <span class="visually-hidden">PDF</span><span aria-hidden="true">↓</span></a></li>
+            <li><a class="btn btn--ghost" href={b.file} hreflang={b.hreflang} download>Download brochure ({b.lang}) <span class="visually-hidden">PDF</span><Icon name="download" class="arrow" /></a></li>
           ))}
         </ul>
       </div>
@@ -83,9 +83,9 @@ const brochures = [
       <p class="lede muted">Let’s discuss how we can represent your brand on the world stage.</p>
       <Email user="belgianjuniorglidingteam" domain="gmail.com" label="Contact the PR Team" class="btn" />
       <ul class="contact">
-        <li><span aria-hidden="true">📞</span> <a href="tel:+32471992890">+32 471 99 28 90</a></li>
-        <li><span aria-hidden="true">🌐</span> <a href="https://www.belgianjuniors.be">www.belgianjuniors.be</a></li>
-        <li><span aria-hidden="true">✉️</span> <Email user="belgianjuniorglidingteam" domain="gmail.com" showAddress /></li>
+        <li><Icon name="phone" /> <a href="tel:+32471992890">+32 471 99 28 90</a></li>
+        <li><Icon name="globe" /> <a href="https://www.belgianjuniors.be">www.belgianjuniors.be</a></li>
+        <li><Icon name="mail" /> <Email user="belgianjuniorglidingteam" domain="gmail.com" showAddress /></li>
       </ul>
     </div>
   </section>
@@ -105,9 +105,8 @@ const brochures = [
   @media (max-width: 520px) { .intro__photos { grid-template-columns: 1fr; } }
 
   .values { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; margin: 0; padding: 0; list-style: none; }
-  .values li { padding: 1.75rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); border-top: 6px solid var(--red); }
-  .values li:nth-child(2) { border-top-color: var(--yellow); }
-  .values li:nth-child(3) { border-top-color: var(--ink); }
+  .values { gap: clamp(1.5rem, 4vw, 3.5rem); }
+  .values li { padding-top: 1.25rem; border-top: 1px solid var(--ink); }
   .values h3 { font-family: var(--font-head); font-weight: 800; font-size: 1.45rem; }
   .values p { margin: 0; color: var(--muted); }
 
@@ -124,6 +123,6 @@ const brochures = [
   .cta { text-align: center; display: flex; flex-direction: column; align-items: center; }
   .cta .lede { margin-inline: auto; margin-bottom: 2rem; }
   .contact { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 2rem; margin: 2.5rem 0 0; padding: 0; list-style: none; }
-  .contact li { display: flex; align-items: center; gap: 0.4rem; }
+  .contact li { display: flex; align-items: center; gap: 0.5rem; color: #b9c0c8; }
   .contact a { display: inline-flex; align-items: center; min-height: 44px; overflow-wrap: anywhere; }
 </style>
