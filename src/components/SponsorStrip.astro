@@ -38,6 +38,9 @@ const sponsors = await getSponsors();
 </section>
 
 <script>
+  // Pause the loop while it is off-screen so it does not burn GPU for nothing.
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => e.target.classList.toggle('is-offscreen', !e.isIntersecting)));
+  document.querySelectorAll('.strip').forEach((s) => io.observe(s));
   document.querySelectorAll<HTMLButtonElement>('.strip__toggle').forEach((btn) => {
     const strip = btn.closest('.strip');
     btn.addEventListener('click', () => {
@@ -56,10 +59,10 @@ const sponsors = await getSponsors();
   .strip__toggle {
     display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; padding: 0 0.9rem;
     border: 1px solid var(--line); border-radius: 999px; background: var(--bg); color: var(--ink);
-    font: 600 0.9rem var(--font-sans); cursor: pointer; transition: border-color 0.18s, transform 0.18s var(--ease);
+    font: 600 0.9rem var(--font-sans); cursor: pointer; touch-action: manipulation; transition: border-color 0.2s ease, transform 0.15s var(--ease);
   }
-  .strip__toggle:hover { border-color: var(--ink); transform: translateY(-1px); }
-  .strip__toggle:active { transform: scale(0.97); }
+  .strip__toggle:hover { border-color: var(--ink); }
+  .strip__toggle:active { transform: scale(0.97); transition-duration: 0s; }
   .strip__icon { width: 10px; height: 12px; border-inline: 3px solid currentColor; }
   .strip__toggle[aria-pressed='true'] .strip__icon { border: 0; border-left: 10px solid currentColor; border-block: 6px solid transparent; width: 0; height: 0; }
 
@@ -67,11 +70,13 @@ const sponsors = await getSponsors();
   .strip__track { display: flex; width: max-content; animation: strip-scroll 40s linear infinite; }
   .strip__viewport:hover .strip__track,
   .strip__viewport:focus-within .strip__track,
-  .strip.is-paused .strip__track { animation-play-state: paused; }
+  .strip.is-paused .strip__track,
+  .strip.is-offscreen .strip__track { animation-play-state: paused; }
   .strip__list { display: flex; align-items: center; gap: clamp(2rem, 5vw, 4rem); margin: 0; padding: 0 clamp(1rem, 2.5vw, 2rem); list-style: none; }
   .strip__list a { display: flex; align-items: center; justify-content: center; height: 88px; padding: 4px; border-radius: var(--radius-sm); }
-  .strip__list img { height: auto; max-height: 72px; width: auto; max-width: 170px; object-fit: contain; filter: grayscale(1); opacity: 0.75; transition: filter 0.25s, opacity 0.25s, transform 0.25s var(--ease); }
-  .strip__list a:hover img, .strip__list a:focus-visible img { filter: none; opacity: 1; transform: scale(1.03); }
+  .strip__list img { height: auto; max-height: 72px; width: auto; max-width: 170px; object-fit: contain; filter: grayscale(1); opacity: 0.75; transition: filter 0.2s ease, opacity 0.2s ease, transform 0.15s var(--ease); }
+  .strip__list a:hover img, .strip__list a:focus-visible img { filter: none; opacity: 1; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) { .strip__list a:hover img { transform: scale(1.02); } }
   @keyframes strip-scroll { to { transform: translateX(-50%); } }
 
   @media (prefers-reduced-motion: reduce) {

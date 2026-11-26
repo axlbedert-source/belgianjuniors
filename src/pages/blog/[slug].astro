@@ -25,7 +25,7 @@ const t = useTranslations();
 ---
 <Base title={title} description={excerpt} image={cover} imageAlt={coverAlt} type="article" published={date}>
   <article>
-    <header class="post-head wrap" data-enter>
+    <header class="post-head wrap">
       <a class="link-draw back" href="/blog"><Icon name="arrow-left" size={16} /> {t('blog.back')}</a>
       <h1>{title}</h1>
       <p class="post-meta"><time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time>{author && <span>· {author}</span>}{draft && <span class="badge draft">{t('blog.draft')}</span>}</p>

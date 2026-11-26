@@ -71,18 +71,31 @@ const large = await Promise.all(
   .gallery figure { margin: 0; }
   .gallery a, .gallery video { display: block; aspect-ratio: 4 / 3; width: 100%; overflow: hidden; border-radius: var(--radius); background: var(--surface-2); }
   .gallery video { object-fit: cover; background: #000; }
-  .gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
-  .gallery a:hover img { transform: scale(1.03); }
+  .gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s var(--ease); }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) { .gallery a:hover img { transform: scale(1.02); } }
   .gallery figcaption { margin-top: 0.5rem; font-size: clamp(0.85rem, 2.4vw, 0.95rem); color: var(--muted); line-height: 1.4; }
 
   .lightbox { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 3.5rem 1rem 1rem; border: 0; background: rgb(10 14 18 / 0.94); color: #f4f2ee; }
   .lightbox::backdrop { background: transparent; }
   .lightbox[open] { display: flex; align-items: center; justify-content: center; }
+  /* Modal: fade + scale from 0.96, open 250ms, close faster at 150ms. Older browsers just cut. */
+  @media (prefers-reduced-motion: no-preference) {
+    .lightbox { opacity: 0; transition: opacity 0.15s ease-out, display 0.15s allow-discrete, overlay 0.15s allow-discrete; }
+    .lightbox[open] { opacity: 1; transition-duration: 0.25s; }
+    .lightbox figure { transform: scale(0.96); transition: transform 0.15s var(--ease); }
+    .lightbox[open] figure { transform: none; transition-duration: 0.25s; }
+    @starting-style {
+      .lightbox[open] { opacity: 0; }
+      .lightbox[open] figure { transform: scale(0.96); }
+    }
+  }
   .lightbox figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; max-height: 100%; }
   .lightbox img { max-width: min(92vw, 1600px); max-height: calc(100dvh - 9rem); object-fit: contain; border-radius: var(--radius-sm); }
   .lightbox figcaption { text-align: center; max-width: 60ch; }
   .lb-btn { position: absolute; display: grid; place-items: center; width: 48px; height: 48px; border: 0; border-radius: 50%; background: rgb(255 255 255 / 0.14); color: #fff; font-size: 1.3rem; cursor: pointer; transition: background 0.18s; }
+  .lb-btn { touch-action: manipulation; transition: background-color 0.2s ease, transform 0.15s var(--ease); }
   .lb-btn:hover { background: rgb(255 255 255 / 0.28); }
+  .lb-btn:active { transform: scale(0.94); transition-duration: 0s; }
   .lb-close { top: 0.75rem; right: 0.75rem; }
   .lb-prev { left: 0.75rem; top: 50%; translate: 0 -50%; }
   .lb-next { right: 0.75rem; top: 50%; translate: 0 -50%; }

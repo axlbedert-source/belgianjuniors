@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "src/components/Gallery.astro"
+        ],
+        "createdAt": "2026-11-26T15:50:08.197Z",
+        "reason": "agent decided: lightbox <img> inside a closed <dialog>; script sets src before showModal(), so it is never shown empty"
+      }
+    ]
+  }
+}
