@@ -1,0 +1,31 @@
+---
+import Logo from './Logo.astro';
+import { nav } from './nav';
+import { useTranslations, type Lang } from '../i18n/ui';
+interface Props { lang?: Lang }
+const t = useTranslations(Astro.props.lang);
+---
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <Logo lang={Astro.props.lang} />
+    <nav aria-label="Footer">
+      <ul>
+        {nav.map(({ href, key }) => <li><a class="link-draw" href={href}>{t(key)}</a></li>)}
+        <li><a class="link-draw" href="/rss.xml">{t('footer.rss')}</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="wrap footer__base">
+    <p>{t('footer.credit')}</p>
+  </div>
+</footer>
+<style>
+  .footer { background: var(--night); color: #f4f2ee; padding-top: 3rem; }
+  .footer :global(.logo__text span:last-child) { color: #b9c0c8; }
+  .footer :global(.logo img) { background: #fff; border-radius: 50%; padding: 4px; }
+  .footer__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: 2rem; padding-bottom: 2rem; }
+  .footer ul { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; margin: 0; padding: 0; list-style: none; }
+  .footer a.link-draw { display: inline-flex; align-items: center; min-height: 44px; color: #f4f2ee; }
+  .footer__base { border-top: 1px solid rgb(255 255 255 / 0.14); padding-block: 1.25rem 1.5rem; }
+  .footer__base p { margin: 0; font-size: 0.95rem; color: #b9c0c8; }
+</style>

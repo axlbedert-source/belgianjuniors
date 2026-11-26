@@ -1,0 +1,25 @@
+---
+import { Image } from 'astro:assets';
+import type { Post } from '../lib/content';
+import { formatDate, useTranslations } from '../i18n/ui';
+interface Props { post: Post; eager?: boolean; headingLevel?: 2 | 3 }
+const { post, eager = false, headingLevel = 2 } = Astro.props;
+const { title, date, cover, coverAlt, excerpt, draft } = post.data;
+const t = useTranslations();
+const H = `h${headingLevel}` as 'h2' | 'h3';
+---
+<article class="card card--link post-card">
+  <div class="card__media">
+    <Image src={cover} alt={coverAlt} widths={[400, 640, 880]} sizes="(min-width: 1100px) 380px, (min-width: 700px) 46vw, 92vw" loading={eager ? 'eager' : 'lazy'} />
+  </div>
+  <div class="card__body">
+    <p class="card__meta"><time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time>{draft && <span class="badge draft">{t('blog.draft')}</span>}</p>
+    <H class="card__title"><a href={`/blog/${post.id}`}>{title}</a></H>
+    <p class="card__text">{excerpt}</p>
+  </div>
+</article>
+<style>
+  .post-card .card__media { aspect-ratio: 3 / 2; }
+  .post-card .card__text { display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .draft { margin-left: 0.5rem; background: var(--yellow); color: var(--ink); }
+</style>

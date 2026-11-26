@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { getTeam } from '../lib/content';
+
+const team = await Promise.all(
+  (await getTeam()).map(async (member) => ({ member, Bio: (await render(member)).Content })),
+);
+const groups = [
+  { id: 'pilots', title: 'Pilots', people: team.filter(({ member }) => member.data.type === 'pilot') },
+  { id: 'crew', title: 'Crew', people: team.filter(({ member }) => member.data.type === 'crew') },
+];
+const firstPhoto = team[0]?.member.data.photo;
+---
+<Base title="Our Team" description="Meet the pilots, crew and mascot of the Belgian Junior Gliding Team at the JWGC 2026." image={firstPhoto}>
+  <section class="section team">
+    <div class="wrap">
+      <header class="team__head" data-enter>
+        <p class="eyebrow">JWGC 2026</p>
+        <h1>Our Team</h1>
+      </header>
+      {groups.map((group) => (
+        <section class="team__group" aria-labelledby={`${group.id}-title`}>
+          <h2 id={`${group.id}-title`}>{group.title}</h2>
+          <ul class="team__grid">
+            {group.people.map(({ member, Bio }, i) => {
+              const d = member.data;
+              return (
+                <li class="card member">
+                  <div class="card__media member__photo">
+                    <Image src={d.photo} alt={d.name} widths={[360, 540, 720]} sizes="(min-width: 1100px) 380px, (min-width: 700px) 46vw, 92vw" loading={group.id === 'pilots' && i < 3 ? 'eager' : 'lazy'} />
+                  </div>
+                  <div class="card__body">
+                    <h3 class="member__name">{d.name}</h3>
+                    {d.type === 'pilot' ? (
+                      <p class="member__meta"><span aria-hidden="true">✈ </span>{[d.glider, d.registration, d.compCode].filter(Boolean).join(' · ')}</p>
+                    ) : (
+                      <p class="member__meta">{d.emoji && <span aria-hidden="true">{d.emoji} </span>}{d.role}</p>
+                    )}
+                    <div class="member__bio"><Bio /></div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </section>
+</Base>
+<style>
+  .team { padding-top: clamp(2.5rem, 6vw, 4.5rem); }
+  .team__head { margin-bottom: clamp(1.5rem, 4vw, 2.5rem); }
+  .team__group + .team__group { margin-top: clamp(3rem, 7vw, 5rem); }
+  .team__group h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+  .team__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: clamp(1rem, 2.5vw, 1.75rem); margin: 0; padding: 0; list-style: none; }
+  .member__photo { aspect-ratio: 4 / 5; }
+  .member__photo img { object-position: 50% 30%; }
+  .member__name { margin: 0; font-family: var(--font-head); font-weight: 800; font-size: 1.45rem; }
+  .member__meta { margin: 0 0 0.5rem; font-weight: 600; color: var(--red-dark); font-size: 1rem; }
+  .member__bio :global(p) { margin: 0; color: var(--muted); font-size: 1rem; }
+</style>

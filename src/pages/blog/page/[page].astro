@@ -1,0 +1,19 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BlogList from '../../../components/BlogList.astro';
+import { getPosts, type Post } from '../../../lib/content';
+import { PER_PAGE } from '../../../lib/paging';
+
+// Page 1 lives at /blog; this file builds /blog/page/2, /blog/page/3, …
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  const last = Math.ceil(posts.length / PER_PAGE);
+  return Array.from({ length: Math.max(0, last - 1) }, (_, i) => i + 2).map((n) => ({
+    params: { page: String(n) },
+    props: { posts: posts.slice((n - 1) * PER_PAGE, n * PER_PAGE), current: n, last },
+  }));
+}) satisfies GetStaticPaths;
+
+const { posts, current, last } = Astro.props as { posts: Post[]; current: number; last: number };
+---
+<BlogList posts={posts} current={current} last={last} />

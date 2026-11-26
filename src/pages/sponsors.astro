@@ -1,0 +1,129 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Email from '../components/Email.astro';
+import SponsorStrip from '../components/SponsorStrip.astro';
+import cockpit from '../assets/sponsors-cockpit.jpg';
+import trailers from '../assets/sponsors-trailers.jpg';
+
+const brochures = [
+  { lang: 'NL', file: '/brochures/Sponsorbrochure_JWGC26_NL.pdf', hreflang: 'nl' },
+  { lang: 'FR', file: '/brochures/Sponsorbrochure_JWGC2026_FR.pdf', hreflang: 'fr' },
+  { lang: 'EN', file: '/brochures/Sponsorbrochure_JWGC26_EN.pdf', hreflang: 'en' },
+];
+---
+<Base title="Sponsorship" description="Support the Belgian Junior Gliding Team: sponsorship opportunities, brochures and contact details." image={cockpit}>
+  <section class="section intro">
+    <div class="wrap intro__grid">
+      <div data-enter>
+        <p class="eyebrow">Sponsorship</p>
+        <h1>Support the Belgian Junior Gliding Team</h1>
+        <div class="prose">
+          <p>The <strong>Junior World Gliding Championships (JWGC)</strong> is the ultimate stage for young aviation talent. In August 2026, the world’s best pilots under 26 will gather in <strong>Aalen, Germany</strong>, to compete in a sport that demands peak mental focus, meteorological strategy, and technical excellence.</p>
+          <p>Representing Belgium is a dedicated team of four elite pilots: <strong>Virginie Valck, Edwige Colson, Michiel Haemels and Wannes Smits</strong>.</p>
+          <p>While our pilots have the talent and the drive, competing at this international level comes with significant logistical challenges. Currently, the team is responsible for its own funding, covering costs for transport, specialized infrastructure, intensive training, and technical support.</p>
+          <p>To bridge this gap, we are looking for partners who want to support Belgian excellence in aviation and technology. Your support helps our juniors fly the Belgian flag on the world stage.</p>
+        </div>
+      </div>
+      <div class="intro__photos">
+        <Image src={cockpit} alt="Cockpit view" widths={[480, 720, 960]} sizes="(min-width: 1000px) 40vw, 92vw" loading="eager" />
+        <Image src={trailers} alt="Glider trailers" widths={[480, 720, 960]} sizes="(min-width: 1000px) 40vw, 92vw" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="why-title">
+    <div class="wrap">
+      <h2 id="why-title" class="visually-hidden">Why sponsor us</h2>
+      <ul class="values">
+        <li><h3>Belgian excellence</h3><p>Support top-tier national talent on the world stage against 20+ nations.</p></li>
+        <li><h3>Innovation &amp; tech</h3><p>Connecting your brand to sustainable aviation, aerodynamics, and precision engineering.</p></li>
+        <li><h3>Visibility</h3><p>International exposure across social media, our daily blog, and branding on trailers/gear.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="offer-title">
+    <div class="wrap">
+      <h2 id="offer-title">Sponsorship opportunities</h2>
+      <div class="offer">
+        <div>
+          <h3>How you can help</h3>
+          <ul>
+            <li>Financial support for operational costs</li>
+            <li>Branded teamwear for the world stage</li>
+            <li>Logistical support</li>
+            <li>Custom technical partnerships</li>
+          </ul>
+        </div>
+        <div>
+          <h3>What we offer</h3>
+          <ul>
+            <li>High-visibility logo placement</li>
+            <li>Daily digital reach via our blog</li>
+            <li>Premium content for your CSR marketing</li>
+            <li>Direct link to Belgian industry talent</li>
+          </ul>
+        </div>
+      </div>
+      <div class="downloads">
+        <h3>Sponsor brochure</h3>
+        <ul class="actions">
+          {brochures.map((b) => (
+            <li><a class="btn btn--ghost" href={b.file} hreflang={b.hreflang} download>Download brochure ({b.lang}) <span class="visually-hidden">PDF</span><span aria-hidden="true">↓</span></a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--night" id="contact" aria-labelledby="cta-title">
+    <div class="wrap cta">
+      <h2 id="cta-title">Ready to partner with us?</h2>
+      <p class="lede muted">Let’s discuss how we can represent your brand on the world stage.</p>
+      <Email user="belgianjuniorglidingteam" domain="gmail.com" label="Contact the PR Team" class="btn" />
+      <ul class="contact">
+        <li><span aria-hidden="true">📞</span> <a href="tel:+32471992890">+32 471 99 28 90</a></li>
+        <li><span aria-hidden="true">🌐</span> <a href="https://www.belgianjuniors.be">www.belgianjuniors.be</a></li>
+        <li><span aria-hidden="true">✉️</span> <Email user="belgianjuniorglidingteam" domain="gmail.com" showAddress /></li>
+      </ul>
+    </div>
+  </section>
+
+  <SponsorStrip />
+</Base>
+<style>
+  .intro { padding-top: clamp(2.5rem, 6vw, 4.5rem); }
+  .intro__grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+  .intro__grid h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
+  .intro__photos { display: grid; gap: 1rem; }
+  .intro__photos img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: calc(var(--radius) * 1.4); }
+  @media (max-width: 1000px) {
+    .intro__grid { grid-template-columns: 1fr; }
+    .intro__photos { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) { .intro__photos { grid-template-columns: 1fr; } }
+
+  .values { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; margin: 0; padding: 0; list-style: none; }
+  .values li { padding: 1.75rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); border-top: 6px solid var(--red); }
+  .values li:nth-child(2) { border-top-color: var(--yellow); }
+  .values li:nth-child(3) { border-top-color: var(--ink); }
+  .values h3 { font-family: var(--font-head); font-weight: 800; font-size: 1.45rem; }
+  .values p { margin: 0; color: var(--muted); }
+
+  .offer { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+  .offer > div { padding: 1.75rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  .offer ul { margin: 0; padding: 0; list-style: none; }
+  .offer li { position: relative; padding: 0.55rem 0 0.55rem 1.8rem; border-bottom: 1px solid var(--line); }
+  .offer li:last-child { border-bottom: 0; }
+  .offer li::before { content: ''; position: absolute; left: 0; top: 1.05rem; width: 0.9rem; height: 0.5rem; border-left: 3px solid var(--red); border-bottom: 3px solid var(--red); transform: rotate(-45deg); }
+  @media (max-width: 760px) { .offer { grid-template-columns: 1fr; } }
+  .downloads { margin-top: 2.5rem; }
+  .downloads ul { margin: 0; padding: 0; list-style: none; }
+
+  .cta { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .cta .lede { margin-inline: auto; margin-bottom: 2rem; }
+  .contact { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 2rem; margin: 2.5rem 0 0; padding: 0; list-style: none; }
+  .contact li { display: flex; align-items: center; gap: 0.4rem; }
+  .contact a { display: inline-flex; align-items: center; min-height: 44px; overflow-wrap: anywhere; }
+</style>

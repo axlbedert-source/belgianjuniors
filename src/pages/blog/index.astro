@@ -1,0 +1,7 @@
+---
+import BlogList from '../../components/BlogList.astro';
+import { getPosts } from '../../lib/content';
+import { PER_PAGE } from '../../lib/paging';
+const posts = await getPosts();
+---
+<BlogList posts={posts.slice(0, PER_PAGE)} current={1} last={Math.max(1, Math.ceil(posts.length / PER_PAGE))} />

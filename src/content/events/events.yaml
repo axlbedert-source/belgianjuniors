@@ -1,0 +1,39 @@
+# Event schedule shown on the home page. Times are local time (optional).
+# type must be one of: Training, Official, Ceremony, Flying, Social
+- id: unofficial-training
+  date: 2026-07-25
+  title: Unofficial training
+  type: Training
+- id: official-training
+  date: 2026-07-30
+  title: Official training
+  type: Training
+- id: first-briefing
+  date: 2026-08-01
+  time: "18:30"
+  title: First official briefing
+  type: Official
+- id: opening-ceremony
+  date: 2026-08-02
+  time: "10:00"
+  title: Opening ceremony
+  type: Ceremony
+- id: first-contest-day
+  date: 2026-08-03
+  title: First contest day
+  type: Flying
+- id: international-evening
+  date: 2026-08-05
+  time: "20:00"
+  title: International evening
+  type: Social
+- id: farewell-party
+  date: 2026-08-14
+  time: "20:00"
+  title: Farewell party
+  type: Social
+- id: closing-ceremony
+  date: 2026-08-15
+  time: "10:00"
+  title: Prize giving & closing ceremony
+  type: Ceremony

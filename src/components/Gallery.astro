@@ -1,0 +1,89 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { GalleryItem } from '../lib/content';
+import { useTranslations } from '../i18n/ui';
+interface Props { items: GalleryItem[]; id: string }
+const { items, id } = Astro.props;
+const t = useTranslations();
+const large = await Promise.all(
+  items.map((item) => (item.kind === 'image' ? getImage({ src: item.image, width: 1800, format: 'webp', quality: 78 }) : null)),
+);
+---
+<ul class="gallery" data-gallery={id}>
+  {items.map((item, i) => (
+    <li>
+      <figure>
+        {item.kind === 'image' ? (
+          <a href={large[i]!.src} data-index={i} data-caption={item.caption}>
+            <Image src={item.image} alt={item.alt} widths={[360, 560, 800]} quality={60} sizes="(min-width: 1100px) 380px, (min-width: 640px) 46vw, 92vw" loading="lazy" />
+          </a>
+        ) : (
+          <video src={`${item.url}#t=0.1`} controls muted playsinline preload="metadata" aria-label={item.label}></video>
+        )}
+        {item.caption && <figcaption>{item.caption}</figcaption>}
+      </figure>
+    </li>
+  ))}
+</ul>
+
+<dialog class="lightbox" aria-label={t('blog.gallery')}>
+  <figure>
+    <img alt="" />
+    <figcaption></figcaption>
+  </figure>
+  <button type="button" class="lb-btn lb-close" data-close aria-label={t('gallery.close')}>✕</button>
+  <button type="button" class="lb-btn lb-prev" data-step="-1" aria-label={t('gallery.prev')}>←</button>
+  <button type="button" class="lb-btn lb-next" data-step="1" aria-label={t('gallery.next')}>→</button>
+</dialog>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((gallery) => {
+    const dialog = gallery.nextElementSibling as HTMLDialogElement;
+    const links = [...gallery.querySelectorAll<HTMLAnchorElement>('a[data-index]')];
+    const img = dialog.querySelector('img')!;
+    const cap = dialog.querySelector('figcaption')!;
+    let current = 0;
+    const show = (i: number) => {
+      current = (i + links.length) % links.length;
+      const a = links[current];
+      img.src = a.href;
+      img.alt = a.querySelector('img')?.alt ?? '';
+      cap.textContent = a.dataset.caption ?? '';
+    };
+    links.forEach((a, i) => a.addEventListener('click', (e) => { e.preventDefault(); show(i); dialog.showModal(); }));
+    dialog.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target === dialog || target.closest('[data-close]')) dialog.close();
+      const step = target.closest<HTMLElement>('[data-step]')?.dataset.step;
+      if (step) show(current + Number(step));
+    });
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') show(current + 1);
+      if (e.key === 'ArrowLeft') show(current - 1);
+    });
+    dialog.addEventListener('close', () => links[current]?.focus());
+  });
+</script>
+
+<style>
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  .gallery figure { margin: 0; }
+  .gallery a, .gallery video { display: block; aspect-ratio: 4 / 3; width: 100%; overflow: hidden; border-radius: var(--radius); background: var(--surface-2); }
+  .gallery video { object-fit: cover; background: #000; }
+  .gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
+  .gallery a:hover img { transform: scale(1.03); }
+  .gallery figcaption { margin-top: 0.5rem; font-size: 0.95rem; color: var(--muted); line-height: 1.4; }
+
+  .lightbox { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 3.5rem 1rem 1rem; border: 0; background: rgb(10 14 18 / 0.94); color: #f4f2ee; }
+  .lightbox::backdrop { background: transparent; }
+  .lightbox[open] { display: flex; align-items: center; justify-content: center; }
+  .lightbox figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; max-height: 100%; }
+  .lightbox img { max-width: min(92vw, 1600px); max-height: calc(100dvh - 9rem); object-fit: contain; border-radius: var(--radius-sm); }
+  .lightbox figcaption { text-align: center; max-width: 60ch; }
+  .lb-btn { position: absolute; width: 48px; height: 48px; border: 0; border-radius: 50%; background: rgb(255 255 255 / 0.14); color: #fff; font-size: 1.3rem; cursor: pointer; transition: background 0.18s; }
+  .lb-btn:hover { background: rgb(255 255 255 / 0.28); }
+  .lb-close { top: 0.75rem; right: 0.75rem; }
+  .lb-prev { left: 0.75rem; top: 50%; translate: 0 -50%; }
+  .lb-next { right: 0.75rem; top: 50%; translate: 0 -50%; }
+  @media (max-width: 640px) { .lb-prev, .lb-next { top: auto; bottom: 1rem; translate: none; } }
+</style>

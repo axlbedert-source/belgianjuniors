@@ -1,0 +1,99 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Gallery from '../../components/Gallery.astro';
+import SponsorStrip from '../../components/SponsorStrip.astro';
+import { getPosts, resolveGallery, type Post } from '../../lib/content';
+import { formatDate, useTranslations } from '../../i18n/ui';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts(); // newest first
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post, newer, older } = Astro.props as { post: Post; newer?: Post; older?: Post };
+const { title, date, cover, coverAlt, excerpt, author, tags, results, draft } = post.data;
+const { Content } = await render(post);
+const gallery = resolveGallery(post);
+const t = useTranslations();
+---
+<Base title={title} description={excerpt} image={cover} imageAlt={coverAlt} type="article" published={date}>
+  <article>
+    <header class="post-head wrap" data-enter>
+      <a class="link-draw back" href="/blog">← {t('blog.back')}</a>
+      <p class="eyebrow"><time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time>{author && <span>· {author}</span>}{draft && <span class="badge draft">{t('blog.draft')}</span>}</p>
+      <h1>{title}</h1>
+      <div class="post-cover">
+        <Image src={cover} alt={coverAlt} widths={[640, 960, 1280, 1800]} sizes="(min-width: 1280px) 1200px, 94vw" loading="eager" fetchpriority="high" />
+      </div>
+    </header>
+
+    <div class="wrap post-body">
+      <div class="prose"><Content /></div>
+
+      {tags && tags.length > 0 && (
+        <ul class="tags">{tags.map((tag) => <li class="badge">{tag}</li>)}</ul>
+      )}
+
+      {results && results.length > 0 && (
+        <section class="post-section" aria-labelledby="results-title">
+          <h2 id="results-title">{t('blog.results')}</h2>
+          <div class="actions">
+            {results.map((r) => (
+              <a class="btn btn--ghost" href={r.url} target="_blank" rel="noopener">{r.label} <span class="visually-hidden">(opens in a new tab)</span><span class="arrow" aria-hidden="true">↗</span></a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {gallery.length > 0 && (
+        <section class="post-section" aria-labelledby="gallery-title">
+          <h2 id="gallery-title">{t('blog.gallery')}</h2>
+          <Gallery items={gallery} id={post.id} />
+        </section>
+      )}
+
+      <nav class="post-nav" aria-label="More posts">
+        {older ? (
+          <a class="card card--link post-nav__link" href={`/blog/${older.id}`} rel="prev">
+            <span class="card__meta">← {t('blog.prev')}</span><span class="post-nav__title">{older.data.title}</span>
+          </a>
+        ) : <span />}
+        {newer ? (
+          <a class="card card--link post-nav__link post-nav__link--next" href={`/blog/${newer.id}`} rel="next">
+            <span class="card__meta">{t('blog.next')} →</span><span class="post-nav__title">{newer.data.title}</span>
+          </a>
+        ) : <span />}
+      </nav>
+    </div>
+  </article>
+  <SponsorStrip />
+</Base>
+
+<style>
+  .post-head { padding-top: clamp(2rem, 5vw, 3.5rem); }
+  .back { display: flex; width: fit-content; align-items: center; min-height: 44px; margin-bottom: 0.75rem; color: var(--muted); }
+  .post-head h1 { max-width: 26ch; font-size: clamp(2.1rem, 5.2vw, 3.8rem); }
+  .post-head .eyebrow span { margin-left: 0.25rem; }
+  .draft { background: var(--yellow); color: var(--ink); }
+  .post-cover { margin-top: clamp(1.5rem, 3vw, 2.5rem); overflow: hidden; border-radius: calc(var(--radius) * 1.6); background: var(--surface-2); }
+  .post-cover img { width: 100%; max-height: 72vh; aspect-ratio: 16 / 9; object-fit: cover; }
+  .post-body { padding-block: clamp(2.5rem, 5vw, 4rem) var(--space); }
+  .post-body .prose { margin-inline: auto; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; max-width: 42rem; margin: 2rem auto 0; padding: 0; list-style: none; }
+  .tags .badge { background: var(--surface-2); color: var(--ink); }
+  .post-section { margin-top: clamp(3rem, 6vw, 4.5rem); }
+  .post-section:has(.actions) { max-width: 42rem; margin-inline: auto; }
+  .post-section h2 { font-size: clamp(1.5rem, 2.6vw, 1.9rem); }
+  .post-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: clamp(3rem, 6vw, 4.5rem); }
+  .post-nav__link { padding: 1.25rem 1.4rem; gap: 0.35rem; text-decoration: none; color: var(--ink); }
+  .post-nav__link:hover { color: var(--ink); }
+  .post-nav__link--next { text-align: right; }
+  .post-nav__title { font-family: var(--font-head); font-weight: 600; font-size: 1.15rem; line-height: 1.25; }
+  @media (max-width: 700px) { .post-nav { grid-template-columns: 1fr; } .post-nav > span { display: none; } }
+</style>

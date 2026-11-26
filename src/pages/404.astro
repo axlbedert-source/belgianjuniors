@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Page not found" description="This page does not exist.">
+  <section class="section">
+    <div class="wrap nf" data-enter>
+      <p class="eyebrow">404</p>
+      <h1>This page landed out.</h1>
+      <p class="lede">The page you are looking for does not exist or has moved. The blog and the team are still where you left them.</p>
+      <div class="actions">
+        <a class="btn" href="/">Go to the home page</a>
+        <a class="btn btn--ghost" href="/blog">Read the blog</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>.nf { min-height: 50vh; display: flex; flex-direction: column; justify-content: center; }</style>
